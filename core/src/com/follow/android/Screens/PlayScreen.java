@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.follow.android.Background.StraightTube;
 import com.follow.android.Characters.Player;
 import com.follow.android.FollowMain;
 import com.follow.android.Others.Score;
@@ -19,6 +20,7 @@ public class PlayScreen implements Screen {
 
     private Score score;
     private Player player;
+    private StraightTube tube;
 
     public PlayScreen(FollowMain main) {
         this.main = main;
@@ -29,12 +31,15 @@ public class PlayScreen implements Screen {
         score = new Score(main.batch);
 
         player = new Player(gameport);
+        tube = new StraightTube(player);
 
         Gdx.gl.glClearColor(0, 0, 1, 1);
     }
 
     public void update(float dt) {
         player.update(dt);
+        tube.update(dt);
+        gamecam.update();
     }
 
     @Override
@@ -47,6 +52,7 @@ public class PlayScreen implements Screen {
 
         main.batch.setProjectionMatrix(gamecam.projection);
         main.batch.begin();
+        tube.render(gamecam);
         player.render(gamecam);
         main.batch.end();
     }
