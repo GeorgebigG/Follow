@@ -1,15 +1,16 @@
 package com.follow.android.Background;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.follow.android.Characters.Player;
 
 public class StraightTube {
 
-    Player player;
-    Rectangle position;
+    private Player player;
+    public Rectangle position;
+
 
     public StraightTube(Player player) {
         this.player = player;
@@ -19,11 +20,20 @@ public class StraightTube {
     }
 
     public void update(float dt) {
+        // temp
+        if (player.position.y < position.y + player.position.radius * 2)
+            player.position.y = position.y + player.position.radius * 2;
+        // temp
 
+        if (player.position.y - player.position.radius <= position.y + position.height) {
+            if (player.position.x < position.x + player.position.radius + 10)
+                player.position.x = position.x + player.position.radius + 10;
+            else if (player.position.x > position.x + position.width - player.position.radius - 10)
+                player.position.x = position.x + position.width - player.position.radius - 10;
+        }
     }
 
-    public void render(OrthographicCamera camera) {
-        player.renderer.setProjectionMatrix(camera.combined);
+    public void render(SpriteBatch batch) {
         player.renderer.begin(ShapeRenderer.ShapeType.Filled);
         player.renderer.setColor(Color.CORAL);
         player.renderer.rect(position.x, position.y, position.width, position.height);

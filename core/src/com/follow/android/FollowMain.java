@@ -7,7 +7,6 @@ import com.follow.android.Screens.PlayScreen;
 public class FollowMain extends Game {
 	public SpriteBatch batch;
 
-
 	public static final int WIDTH = 500;
 	public static final int HEIGHT = 800;
 

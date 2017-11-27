@@ -1,5 +1,7 @@
 package com.follow.android.Characters;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,16 +16,33 @@ public class Player {
     public ShapeRenderer renderer;
     public Viewport viewport;
 
-    public Player(Viewport viewport) {
-        int width = 30;
+    private static int speed;
 
-        this.position = new Circle(0, -viewport.getWorldHeight() / 2 + width * 2, width);
+    public static int getSpeed() {
+        return speed;
+    }
+
+    public Player(Viewport viewport) {
+        int radius = 30;
+
+        speed = 3;
+        this.position = new Circle(0, -viewport.getWorldHeight() / 2 + radius * 2, radius);
         renderer = new ShapeRenderer();
         this.viewport = viewport;
     }
 
     public void update(float dt) {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            position.x += 3;
 
+        else if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            position.x -= 3;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            position.y += speed;
+
+        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            position.y -= speed;
     }
 
     public void render(OrthographicCamera camera) {
