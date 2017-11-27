@@ -20,17 +20,6 @@ public class StraightTube {
     }
 
     public void update(float dt) {
-        // temp
-        if (player.position.y < position.y + player.position.radius * 2)
-            player.position.y = position.y + player.position.radius * 2;
-        // temp
-
-        if (player.position.y - player.position.radius <= position.y + position.height) {
-            if (player.position.x < position.x + player.position.radius + 10)
-                player.position.x = position.x + player.position.radius + 10;
-            else if (player.position.x > position.x + position.width - player.position.radius - 10)
-                player.position.x = position.x + position.width - player.position.radius - 10;
-        }
     }
 
     public void render(SpriteBatch batch) {

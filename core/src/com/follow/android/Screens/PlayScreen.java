@@ -5,12 +5,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.follow.android.Background.Cross;
+import com.follow.android.Background.Path;
 import com.follow.android.Background.StraightTube;
 import com.follow.android.Characters.Player;
 import com.follow.android.FollowMain;
@@ -20,13 +22,16 @@ public class PlayScreen implements Screen {
 
     FollowMain main;
 
-    private OrthographicCamera gamecam;
+    public static OrthographicCamera gamecam;
     private Viewport gameport;
 
     private Score score;
     private Player player;
     private StraightTube tube;
     private Cross cross;
+    private Path path;
+
+    public static final boolean DEBUG = true;
 
     public PlayScreen(FollowMain main) {
         this.main = main;
@@ -39,17 +44,13 @@ public class PlayScreen implements Screen {
         player = new Player(gameport);
         tube = new StraightTube(player);
         cross = new Cross(player, tube);
+        path = new Path();
+        path.findPath(cross, tube, player);
 
         Gdx.gl.glClearColor(0, 0, 1, 1);
     }
 
     public void update(float dt) {
-        player.update(dt);
-        tube.update(dt);
-        cross.update(dt);
-
-        gamecam.position.y = player.position.y + gamecam.viewportHeight / 2 - player.position.radius * 2;
-
         Vector3 point = new Vector3(player.position.x, player.position.y, 0);
         Vector3 axis = new Vector3(0, 0, 1f);
 
@@ -57,6 +58,15 @@ public class PlayScreen implements Screen {
             gamecam.rotateAround(point, axis, 1);
         else if (Gdx.input.isKeyPressed(Input.Keys.L))
             gamecam.rotateAround(point, axis, -1);
+
+        else {
+            player.update(dt);
+            tube.update(dt);
+            cross.update(dt);
+            path.update(dt);
+        }
+
+        gamecam.position.y = player.position.y + gamecam.viewportHeight / 2 - player.position.radius * 2;
 
         if (Gdx.input.isKeyPressed(Input.Keys.PLUS) || Gdx.input.isKeyPressed(Input.Keys.EQUALS))
             gamecam.zoom -= 0.02f;
@@ -78,6 +88,8 @@ public class PlayScreen implements Screen {
         tube.render(main.batch);
         cross.render(gamecam);
         player.render(gamecam);
+        if (DEBUG)
+            path.render(gamecam);
         main.batch.end();
 
 
